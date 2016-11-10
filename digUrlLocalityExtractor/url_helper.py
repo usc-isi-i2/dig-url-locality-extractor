@@ -27,7 +27,7 @@ def extract(doc, cities, states, countries_dict, countries, stop_words):
     dict_out = {}
 
     #Get cities from tokens    
-    e = get_name_dictionary_extractor(cities).set_pre_filter(lambda x:x).set_pre_process(lambda x:x.lower())
+    e = get_name_dictionary_extractor(cities).set_pre_filter(lambda x:x not in stop_words)
     e.set_ngrams(3)
     e.set_joiner(' ')
     ep = ExtractorProcessor().set_input_fields('text').set_output_field('cities').set_extractor(e)
@@ -37,29 +37,29 @@ def extract(doc, cities, states, countries_dict, countries, stop_words):
         value = updated_doc['cities'][0]['value']
         if 'kc' in value:
             value.append('kansas city')
-        dict_out['cities'] = [x for x in value if len(x) > 3 and x not in stop_words]
+        dict_out['cities'] = [x for x in value if len(x) > 3]
     except Exception:
         dict_out['cities'] = []
 
     #Get states from tokens
-    e = get_name_dictionary_extractor(states).set_pre_filter(lambda x:x).set_pre_process(lambda x:x.lower())
+    e = get_name_dictionary_extractor(states).set_pre_filter(lambda x:x not in stop_words)
     e.set_ngrams(3)
     e.set_joiner(' ')
     ep = ExtractorProcessor().set_input_fields('text').set_output_field('states').set_extractor(e)
     updated_doc = ep.extract(doc)
     try:
-        dict_out['states'] = [x for x in updated_doc['states'][0]['value'] if x not in stop_words]
+        dict_out['states'] = updated_doc['states'][0]['value']
     except Exception:
         dict_out['states'] = []
 
     #Get countries from tokens
-    e = get_name_dictionary_extractor(countries).set_pre_filter(lambda x:x).set_pre_process(lambda x:x.lower())
+    e = get_name_dictionary_extractor(countries).set_pre_filter(lambda x:x not in stop_words)
     e.set_ngrams(3)
     e.set_joiner(' ')
     ep = ExtractorProcessor().set_input_fields('text').set_output_field('countries').set_extractor(e)
     updated_doc = ep.extract(doc)
     try:
-        dict_out['countries'] = [x for x in updated_doc['countries'][0]['value'] if x not in stop_words]
+        dict_out['countries'] = updated_doc['countries'][0]['value']
     except Exception:
         dict_out['countries'] = []
 
