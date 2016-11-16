@@ -4,9 +4,6 @@ import types
 import json
 import string
 from digExtractor.extractor import Extractor
-from digDictionaryExtractor.name_dictionary_extractor import get_name_dictionary_extractor
-from digExtractor.extractor_processor import ExtractorProcessor
-from digDictionaryExtractor.populate_trie import populate_trie
 
 class UrlLocalityExtractor(Extractor):
 
@@ -57,7 +54,7 @@ class UrlLocalityExtractor(Extractor):
         
     def extract(self, doc):
         dict_out = {}
-        print doc
+
         if 'city_from_url' in doc:
             dict_out['cities'] = list(doc['city_from_url'])
         else:
@@ -75,7 +72,6 @@ class UrlLocalityExtractor(Extractor):
 
         tokens_doc = list(doc['tokens'])
         url = list(doc['url'])[0]
-        print url
 
         #Get country codes from url
         ann_countries = []
