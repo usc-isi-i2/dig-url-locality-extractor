@@ -15,7 +15,7 @@ config = {
                          'digExtractor>=0.3.6',
                          'digCityExtractor'],
     # these are the subdirs of the current directory that we care about
-    'packages': ['digCityExtractor'],
+    'packages': ['digUrlLocalityExtractor'],
     'scripts': [],
 }
 
