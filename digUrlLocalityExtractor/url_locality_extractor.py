@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-import copy 
-import types
-import json
-import string
+import copy
 from digExtractor.extractor import Extractor
+
 
 class UrlLocalityExtractor(Extractor):
 
     def __init__(self):
-        self.renamed_input_fields = ['tokens', 'city_from_url', 'state_from_url', 'country_from_url', 'url']
+        self.renamed_input_fields = ['tokens',
+                                     'city_from_url',
+                                     'state_from_url',
+                                     'country_from_url',
+                                     'url']
         self.cities = None
         self.states = None
         self.country_code_dict = {}
@@ -73,11 +75,11 @@ class UrlLocalityExtractor(Extractor):
         tokens_doc = list(doc['tokens'])
         url = list(doc['url'])[0]
 
-        #Get country codes from url
+        # Get country codes from url
         ann_countries = []
         for token in tokens_doc:
             if token in self.country_code_dict:
-                #Check if its actually a country code in the orig url
+                # Check if its actually a country code in the orig url
                 pos = url.find('.' + token)
                 if url[pos-3:pos] in ['.co', '.ac'] or url[pos-4:pos] in ['.org', '.com', '.edu', '.gov']:
                     ann_countries.append(self.country_code_dict[token])
@@ -86,17 +88,17 @@ class UrlLocalityExtractor(Extractor):
         for token in tokens_doc:
             for i in range(0, len(token)):
                 for j in range(i):
-                    #Cities
+                    # Cities
                     value = token[j:i]
                     city = self.cities.get(value)
                     if city is not None and len(value) > 4 and value not in self.stop_words:
                         dict_out['cities'].append(value)
-                    #States
+                    # States
                     state = self.states.get(value)
                     if state is not None and len(value) > 4 and value not in self.stop_words:
                         dict_out['states'].append(value)
 
-                    #Countries
+                    # Countries
                     country = self.countries.get(value)
                     if country is not None and len(value) > 4 and value not in self.stop_words:
                         dict_out['countries'].append(value)
